@@ -14,7 +14,7 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 //@EnableMongoAuditing
-@Document(indexName = "sanjeev", type = "fulfillment")
+@Document(indexName = "fulfillment", type = "fulfillment", shards = 1, replicas = 0, refreshInterval = "-1")
 public class Fulfillment implements Serializable {
 
     private static final long serialVersionUID = 2382101368014195289L;
