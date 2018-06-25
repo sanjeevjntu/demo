@@ -2,11 +2,10 @@ package com.example.demo;
 
 import com.google.common.collect.Lists;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -52,6 +51,19 @@ public class OrderController {
                 .forEach(fulfillments::add);
         return ok(fulfillments);
 
+    }
+
+    @GetMapping(path = "/orders/{vin}", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Fulfillment>> getOrdersByVins(@PathVariable String vin) {
+
+        Page<Fulfillment> fulfillmentPage = fulfillmentElasticRepository.findALLByyVins(vin , PageRequest.of(5,10));
+
+        return ok(fulfillmentPage.getContent());
+    }
+
+    @GetMapping(path = "/orders", params = {"vin"}, produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Fulfillment>> getOrdersByVin(@RequestParam String vin) {
+        return ok(fulfillmentElasticRepository.getByVin(vin));
     }
 
 }
